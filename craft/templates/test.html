@@ -1,0 +1,86 @@
+{% extends "_layout" %}
+{% includeCssFile "/static/styles/partneur.css" %}
+{% set title = "Partneur" %}
+
+{% block content %}
+<h1> Welcome {{currentUser.name}}, here are some Twig tests: </h1>
+
+<form method="post" accept-charset="UTF-8">
+    <input type="hidden" name="action" value="entries/saveEntry">
+    <input type="hidden" name="redirect" value="viewentry/{id}">
+    <input type="hidden" name="sectionId" value="2">
+    <input type="hidden" name="enabled" value="1">
+    <p>Recipient(s): <input type="text" name="recipients"></p>
+    <p>Subject: <input type="text" name="subject"></p>
+    <p>Body: <input type="text" name="body"></p>
+      <input type="submit" value="Send">
+</form>
+
+
+<form action="{{ url('search/results') }}">
+    <input type="search" name="q" placeholder="Search">
+    <input type="submit" value="Go">
+</form>
+
+{% for m in craft.entries.section('messages').limit(10) if currentUser.id in m.to.ids() %}
+<h3>From:{{m.from|join(', ')}}.</h3>
+<h3>To:{{m.to|join(', ')}}.</h3>
+<h3>Subject: {{m.title}}</h3>
+<p>Message: {{m.body}}</p>
+{% endfor %}
+
+
+{% for block in currentUser.userSkills %}
+
+    {% if block.type == "favoriteSkills" %}
+
+    <p>Favorite Skills:<br>
+    {% for skill in block.fskills %}
+    {{skill.title}}<br>
+    {% endfor %}
+    </p>
+
+    {% elseif block.type == "regularSkills" %}
+    
+    <p>Regular Skills:<br>
+    {% for skill in block.rskills %}
+    {{skill.title}}<br>
+    {% endfor %}
+    </p>
+
+    {% endif %}
+{% endfor %}
+
+<h3>Array tests:</h3>
+{% set colors = ['red', 'green', 'blue'] %}
+<ul>
+{% for color in colors %}
+    <li>{{color}}</li>
+{% endfor %}
+</ul>
+
+<p>Green is located at position {{ colors|indexOf('green') + 1 }}.</p>
+
+<h3>Nested for loops with cycling: </h3>
+
+    {% for i in range(1, 10) %}
+        {% set ievenodd = cycle(['odd', 'even'], loop.index0) %}
+        {% for j in range(1, 10) %}
+        {{ i }},{{j}}: {{ievenodd}},{{ cycle(['odd', 'even'], loop.index0) }}<br>
+        {% endfor %}
+    {% endfor %}
+
+<h3>Table test with multiplication</h3>
+<table>
+{% for m in range(1, 100) %}
+<tr>    
+    <td style="border: 1px solid black; padding: 5px;">{{m}}</td>
+        {% for n in range(1,100) %}
+        <td style="border: 1px solid black; padding: 5px;">{{m*n}}</td>
+        {% endfor %}
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+<div class="users">
+
+{% if users and users|length > 0 %}
+{% for user in users if user.status=='active' and user.firstName != '' %}
+    <div class="row">
+        <div class="col-sm-2">
+            <img src="{{user.photoUrl(75) | default('/static/images/sir-not-appearing-in-this-film.jpg') }}" class='img-circle' width="75" />
+        </div>
+        <div class="col-sm-3">
+            <a href="/profiles/{{user.id}}"><strong>{{ user.jobTitle }}</strong><br>{{user.name}}</a>
+        </div>
+        <div class="col-sm-7">
+             {% for skillList in user.userSkills %}{% for skill in skillList.skills %}{% if skill.approved %}<a href="/profiles?skill={{skill.slug}}">{{skill| replace(' ', '&nbsp;') | raw}}</a>{% if not loop.last %}, {%endif %}{% endif %}{% endfor%}{#% if not loop.last %},&nbsp;{% endif %#}{% endfor%}
+             <br><small>{{user.bio | slice(0,200) }}{% if user.bio| length > 200 %}...{% endif %}</small>
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+    <p>No results found. <a href="/profiles">Search for more profiles</a>.</p>
+{% endif %}
+</div>

@@ -1,0 +1,71 @@
+
+{% extends "_layout" %}
+{% set title = "Partneur Profile" %}
+{# set profileId = craft.request.getSegment(2) #}
+{% set profileId = 4 %}
+
+{% block content %}
+
+{% for profile in craft.users if profile.id==profileId %}
+
+<div class="row">
+		    <div id="profile" class="col-md-7">
+		        <div class="row">
+                    <div class="col-md-5" id="avatar">
+                        <img src="/static/images/sir-not-appearing-in-this-film.jpg" />
+        
+                        <button>follow</button>
+                        <button class="selected">message</button>
+                    </div>
+                    <div class="col-md-7">
+
+                        <div>
+                            <h2>{{ profile.name |default('Sir Not Appearing In This Film') }}</h2>
+                            <button>{{ profile.jobTitle | default('Knight of the round table') }}</button>
+                        </div>
+                        <p>{{ profile.bio }}</p>
+                    <ul id="favorites">Favorite Skills:
+                        {% for list in profile.userSkills %}
+                            {% if list.type=='favoriteSkills' %}
+                            {% for skill in list.skills %}
+								<li><button class="selected">{{skill.title}}</button></li>
+								{% endfor %}    
+                               {% endif %}
+                        {% endfor %}
+                    </ul>
+					<ul id="regular">Regular Skills:
+                        {% for list in profile.userSkills %}
+                            {% if list.type=='regularSkills' %}
+                            {% for skill in list.skills %}
+								<li><button>{{skill.title}}</button></li>
+								{% endfor %}    
+                               {% endif %}
+                        {% endfor %}
+                    </ul>	
+                </div>
+            </div>
+		</div>
+		<div class="col-md-5">
+
+		</div>
+		</div>
+		<div class="row">
+		    <div class="col-md-3">
+		        <ul>
+		            <li>List of messages in system</li>
+		            <li>setup the message sections/forms</li>
+		            <li>figure out how to style them</li>
+		        </ul>
+		    </div>
+		    
+		    <div class="col-md-6">
+		        <p>probably need to insert the intial survey here as there isn't any projects to fill the section</p>
+		    </div>
+		    
+		    <div class="col-md-3">
+		        <p>probably a list of followed people here</p>
+		    </div>
+
+		</div>
+{% endfor %}		
+{% endblock %}

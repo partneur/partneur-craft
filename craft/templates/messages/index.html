@@ -1,0 +1,59 @@
+
+{% extends "_layout" %}
+{% set title = "Partneur Messages" %}
+
+{% if currentUser%}
+
+{% block content %}
+
+<div class="container">
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>Messages</h1>
+        
+        <a href="/messages/new" class="p-button"><span class="fa fa-plus"></span> Create New Message</a>
+        
+        <table class="table">
+        <thead>
+        <tr>{# <th></th> #}<th>date</th><th>from</th><th>title</th>{#<th>message</th>#}</tr>
+        </thead>
+        <tbody>
+        {% for message in craft.entries.section('messages') %}
+            {% for recipient in message.to if recipient.id == currentUser.id %}
+                <tr>
+                    <td>{{message.postDate}}</td>
+                    <td><a href="/profiles/{{message.from.first.id}}">
+                        {% if message.read %}
+                            {{message.from.first.fullName}}
+                        {% else %}
+                            <strong>{{message.from.first.fullName}}</strong>
+                        {% endif %}
+                        </a></td>
+                    <td>
+                        <a href="/messages/{{message.id}}">
+                        {% if message.read %}
+                            {{message.title}}
+                        {% else %}
+                            <strong>{{message.title}}</strong>
+                        {% endif %}
+                        </a>
+                    </td>
+                    </tr>
+            {% endfor %}
+        {% endfor %}     
+        </tbody>
+        
+        </table>
+    </div>
+    <div class="col-md-4">
+        {% include '_recentContacts' %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% else %}
+    {% redirect '/login' %}
+{% endif %}

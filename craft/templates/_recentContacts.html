@@ -1,0 +1,27 @@
+<div class="well">
+
+<h3>Recent Contacts</h3>
+
+{% set recentContacts = []%}
+{% for message in craft.entries.section('messages') %}
+    {% set inSet = false %}
+    {# check that they're not already in the list #}
+
+    {% if message.to.first.id == currentUser.id %}
+        {% for rc in recentContacts if message.from.first.id == rc.id %}
+            {% set inSet = true %}
+        {% endfor %}
+        {% if not inSet %}
+            {% set recentContacts = recentContacts|merge([message.from.first]) %}
+        {% endif %}
+    {% endif %}
+    
+{% endfor %}
+<ul class="list">
+    {% for contact in recentContacts %}
+        <li><a href="/profiles/{{contact.id}}">{{contact.fullName}}</a></li>
+    {% endfor %}
+
+</ul>
+
+</div>

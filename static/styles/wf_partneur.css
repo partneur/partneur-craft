@@ -1,0 +1,252 @@
+.nav {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  font-family: Montserrat, sans-serif;
+  font-size: 15px;
+}
+
+.nav-links {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  height: 75px;
+  margin-top: 0px;
+  float: none;
+  -webkit-transition: background-color 350ms ease;
+  transition: background-color 350ms ease;
+  line-height: 38px;
+}
+
+.nav-links:hover {
+  height: 75px;
+  margin-top: 0px;
+  background-color: #7000ff;
+  color: #fff;
+}
+
+.logo {
+  width: 137px;
+  margin-top: 16px;
+  margin-left: 5%;
+  clear: left;
+}
+
+.nav-container {
+  width: 360px;
+  margin-right: 150px;
+  margin-left: 150px;
+  float: left;
+}
+
+.profile-block {
+  position: static;
+  width: 100%;
+  background-color: #fff;
+}
+
+.purple-slice {
+  width: 57%;
+  height: 231px;
+  margin-left: -121px;
+  background-color: #7c1cff;
+  -webkit-transform: skew(-46deg, 0deg);
+  -ms-transform: skew(-46deg, 0deg);
+  transform: skew(-46deg, 0deg);
+}
+
+.profile-pic {
+  margin-top: 34px;
+  margin-left: 30%;
+  padding-right: 0px;
+  border-radius: 133px;
+  -webkit-transform: skew(46deg, 0deg);
+  -ms-transform: skew(46deg, 0deg);
+  transform: skew(46deg, 0deg);
+}
+
+.current-message {
+  width: 100%;
+  height: 45px;
+  background-color: #e7e7e7;
+  line-height: 42px;
+  text-align: center;
+}
+
+.text-links {
+  color: #8207f5;
+  font-weight: 700;
+}
+
+.message-star {
+  width: 32px;
+  margin-top: 0px;
+  margin-left: 0px;
+  float: none;
+  text-align: left;
+}
+
+.brand {
+  width: 141px;
+}
+
+.username {
+  height: 42px;
+  margin-top: -94px;
+  margin-left: 42%;
+  -webkit-transform: skew(46deg, 0deg);
+  -ms-transform: skew(46deg, 0deg);
+  transform: skew(46deg, 0deg);
+  font-family: Montserrat, sans-serif;
+  color: #fff;
+  font-size: 19px;
+}
+
+.user-description {
+  width: 433px;
+  height: 86px;
+  margin-top: -6px;
+  margin-left: 49%;
+  -webkit-transform: skew(46deg, 0deg);
+  -ms-transform: skew(46deg, 0deg);
+  transform: skew(46deg, 0deg);
+  font-family: Roboto, sans-serif;
+  color: #fff;
+  font-weight: 100;
+}
+
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 -1px 3px 0 #000;
+}
+
+.hero-section {
+  height: 600px;
+  margin-top: -93px;
+  background-image: url('../images/hero-image-v2.jpg');
+  background-position: 50% -106px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.hero-text {
+  position: static;
+  display: block;
+  width: 50%;
+  margin-top: 90px;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.hero-text-container {
+  position: absolute;
+  display: block;
+  margin-top: 129px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.hero-container {
+  position: relative;
+  top: 127px;
+  margin-top: 66px;
+  margin-bottom: 66px;
+}
+
+.sign-up-form {
+  display: block;
+  width: 450px;
+  margin: 62px auto;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 4px;
+  background-color: #8917f3;
+}
+
+.name-field {
+  border-radius: 4px;
+}
+
+.email-field {
+  border-radius: 4px;
+}
+
+.mission-statement {
+  position: static;
+  padding-top: 107px;
+  padding-bottom: 107px;
+  font-family: Montserrat, sans-serif;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .logo {
+    margin-left: 11px;
+  }
+  .purple-slice {
+    width: 74%;
+    margin-left: -121px;
+  }
+  .profile-pic {
+    margin-left: 21%;
+  }
+  .username {
+    margin-left: 39%;
+  }
+  .user-description {
+    width: 300px;
+  }
+  .menu-button {
+    margin-right: -69%;
+  }
+  .mission-statement {
+    width: 94%;
+    margin-right: 25px;
+    margin-left: 25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .logo {
+    margin-left: 20px;
+  }
+  .mission-statement {
+    width: 87%;
+    margin-right: 7%;
+    margin-left: 7%;
+  }
+}
+
+@media (max-width: 479px) {
+  .purple-slice {
+    width: 168%;
+    margin-left: -125px;
+  }
+  .menu-button {
+    margin-top: -50px;
+    margin-right: 56%;
+  }
+  .sign-up-form {
+    width: 75%;
+    margin-top: -127px;
+  }
+  .mission-statement {
+    width: 73%;
+    margin-top: -239px;
+    margin-right: 12%;
+    margin-left: 12%;
+    padding-top: 211px;
+    padding-bottom: 211px;
+    font-size: 27px;
+  }
+}
+

@@ -1,0 +1,88 @@
+{#
+ # Layout template
+ # ---------------
+ #
+ # This template defines your site’s global layout. It can be
+ # “extended” by other templates to fill in the gaps.
+ #
+ # See Twig’s Template Inheritance documentation for more details:
+ # http://twig.sensiolabs.org/doc/templates.html#template-inheritance
+ #}
+
+
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+	<meta charset="utf-8" />
+	<title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
+	<link rel="home" href="{{ siteUrl }}" />
+	
+	{% includeCssFile "/static/libs/bootstrap-3.3.6-dist/css/bootstrap.min.css" %}
+	{% includeCssFile "/static/libs/font-awesome-4.5.0/css/font-awesome.min.css" %}
+	{% includeJsFile "/static/scripts/jquery-2.2.1.min.js" first %}
+	{% includeJsFile "/static/libs/bootstrap-3.3.6-dist/js/bootstrap.min.js" %}
+    {% includeCssFile "/static/styles/partneur.css" %}
+</head>
+
+<body>
+	<header id="header" class="clearfix">
+        
+    	<nav class="nav-icons">
+	        <ul>
+	            <li><a href="/profiles"><span class="fa fa-search"></span></a></li>
+	           
+	            {% if currentUser %}
+                    {% set newMailCount = 0 %}
+                    {% for mail in craft.entries.section('messages') if not mail.read %}
+                        {% for recipient in mail.to if recipient.id==currentUser.id %}
+                            {% set newMailCount = newMailCount + 1 %}    
+                        {% endfor %}
+                    {% endfor %}
+                    <li><a href="/messages"><span class="fa fa-envelope-o"></span>{% if newMailCount > 0 %}<sup>{{ newMailCount }}</sup>{% endif %}</a></li>
+		            <li><a href="/profiles/{{ currentUser.id }}">{% if currentUser.photoUrl %}<img src="{{currentUser.photoUrl(25)}}" class='img-circle' />{% else %}<span class="fa fa-user"></span>{% endif %}</a></li>
+		            <li><a href="/logout">logout</a></li>
+		        {% else %}
+		            <li><a id="login" data-toggle="modal" data-target="#loginModal">login / signup</a></li>
+		        {% endif %}
+	        </ul>
+	    </nav>
+	
+	    <nav>
+		    <ul>
+		        <li><a id="logo" href="/"><img src="/static/images/partneur-logo.png" height="25px" /></a></li>
+		        <!--li><a href="/projects">projects</a></li-->
+                <li><a href="/profiles">people</a></li>                   
+		    </ul>
+	    </nav>
+	</header>
+
+	<main id="content" role="main">
+		{% block content %}
+		{% endblock %}
+		<br>
+	</main>
+
+	<footer id="footer">
+	    
+	    <ul>
+	        <li class="pull-left"><a href="/"><img src="/static/images/partneur-logo-white.png" height="25px"/></a></li>
+	        <li><a href="/profiles">people</a></li>
+	        <!--li><a href="#">projects</a></li-->
+	        <li><a href="/how-it-works">how it works</a></li>
+	        <li><a href="#">contact us</a></li>
+	        {% if not currentUser %}
+	            <li><a data-toggle="modal" data-target="#loginModal">log in</a></li>
+	            <li><a href="/">register</a></li>
+	        {% endif %}
+	        <li class="pull-right">all rights reserved. &copy; partneur {{ now.year }}</li>
+	    </ul>
+
+	</footer>
+
+	
+	
+	{% include '_login_modal.html' %}
+</body>
+</html>

@@ -1,0 +1,36 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="loginModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center">Login to Partneur <strong>or</strong> <a href="/">create a new account</a></h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" accept-charset="UTF-8">
+                    {{ getCsrfInput() }}
+                    <input type="hidden" name="action" value="users/login">
+                    <input type="hidden" name="redirect" value="/profiles/{id}">
+
+                     <input id="loginName" type="text" name="loginName" value="{{ craft.session.rememberedUsername }}" placeholder="username or email" class="p-input">
+
+                    <input id="password" type="password" name="password" placeholder="password" class="p-input">
+
+                        <label>
+                            <input type="checkbox" name="rememberMe" value="1">
+                             Remember me
+                        </label><a href="{{ url('forgotpassword') }}" class="pull-right">Forget your password?</a>
+                    
+                    <input type="submit" value="Login" class="p-submit"> 
+
+                    {% if errorMessage is defined %}
+                        <p>{{ errorMessage }}</p>
+                    {% endif %}
+                </form>
+      </div>
+      <!--div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div-->
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

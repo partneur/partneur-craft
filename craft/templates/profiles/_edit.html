@@ -1,0 +1,176 @@
+{% requireLogin %}
+
+{% extends "_layout" %}
+{% set title = "Edit Profile" %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" id="editProfileForm">
+            {{ getCsrfInput() }}
+            <input type="hidden" name="action" value="users/saveUser">
+            <!--input type="hidden" name="action" value="partneur/profile/saveProfile"-->
+            <input type="hidden" name="redirect" value="profiles/{{ currentUser.id }}">
+            <input type="hidden" name="userId" value="{{ currentUser.id }}">
+            <input type="hidden" name="fef" value="true" />
+            <h3>Edit your profile</h3>
+            
+            <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="userPhoto">Photo </label>
+                    <br>{% if currentUser.photoUrl %}<img src="{{currentUser.photoUrl(200)}}" class='img-circle' />{% endif %}<input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
+                </div>
+            </div>
+            
+            <div class="col-sm-6">
+                
+                <!--div class="form-group">
+                    <label>email</label>
+                    <input type="text" disabled="disabled" value="{{currentUser.email}}" class="form-control">
+                </div-->
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" name="firstName" value="{{currentUser.firstName}}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" value="{{currentUser.lastName}}" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="fields[phoneNumber]">Phone Number</label>
+                    <input type="text" name="fields[phoneNumber]" value="{{ currentUser.phoneNumber }}" class="form-control">
+                    <p class="help-block">Your phone number will not be displayed on the site.</p>
+                </div>
+
+            </div>
+</div>
+
+<div class="row">
+
+            <div class="col-sm-6">
+                    <div class="form-group">
+                    <label for="fields[jobTitle]">Job Title</label>
+                    <input type="text" name="fields[jobTitle]" value="{{ currentUser.jobTitle }}" class="form-control">
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea name="fields[bio]" rows="6" class="form-control">{{ currentUser.bio }}</textarea>
+                    
+                </div>        
+            
+            </div>       
+            <div class="col-sm-6">
+                <label>Skills</label>
+                {% for block in currentUser.userSkills %}
+                        <div class="blockdata" data-block-id="{{block.id}}" data-block-type="{{block.type}}"></div>
+                        <input type="hidden" name="fields[userSkills][{{ block.id }}][type]" value="{{block.type}}">
+                        <input type="hidden" name="fields[userSkills][{{ block.id }}][enabled]" value="1">
+                        <!-- insert the hidden inputs for the appropriate block with javascript -->
+                        <!--input type="text" name="fields[userSkills][{{ block.id }}][fields][newskills][1]" value="copypasta"-->
+                        {% for skill in block.skills %}
+                            <div class="form-group" id="{{block.id}}{{loop.index}}">
+                                <input type="hidden" name="fields[userSkills][{{ block.id }}][fields][skills][{{loop.index}}]" value="{{skill.id}}"> 
+                                <!--input type="checkbox" {% if block.type=="favoriteskills" %}checked="checked"{% endif %}-->
+                                {{skill}}
+                                <a class="btn btn-xs btn-danger deleteskill" onclick="delskill({{block.id}}{{loop.index}});return false;"><span class="fa fa-times"></span></a>
+                            </div>
+                        {% endfor %}                     
+            {% endfor %}
+            <div id="newskilllist"></div>
+            
+            <div class="form-group">
+                <select id="addexistingskill">
+                    <option value="">select an existing skill</option>
+                    {% for skill in craft.entries.section('skills') %}
+                        <option value="{{skill.id}}">{{skill.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="newskill" value="" placeholder="enter a new skill" id="addnewskill">
+            </div>
+</div>
+
+           </div>
+
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+            <input type="submit" value="Save Profile" class="p-submit">
+        </div>
+    </div>           
+
+
+        </form>
+
+    </div>
+
+</div>
+</div>
+{% set editProfileJs %}
+
+    var blocks = [];
+    $(document).ready(function() {
+        $('.blockdata').each(function() {
+            blocks[this.dataset.blockType] = this.dataset.blockId;
+        });
+    });
+    
+    function delskill (id) {
+        $('#' + id).remove();
+    }
+    
+    $('#addnewskill').change(function(event) {
+        event.preventDefault();
+        addNewSkill();
+    });
+    $('#addnewskill').keypress(function(event) {
+        if (event.which == '13') {
+            event.preventDefault();
+            addNewSkill();
+        }
+    });
+
+    function addNewSkill() {
+        console.log('calling addNewSkill');
+        var skillName = $('#addnewskill').val();
+        if (skillName !== '') {
+            var uniqid = Date.now();
+            $('#newskilllist').append('<div class="form-group" id="'+ uniqid +'"><input type="hidden" name="fields[userSkills][' + blocks['regularskills'] + '][fields][newskills]['+ uniqid +']" value="' + skillName + '"><!--input type="checkbox"--> ' + skillName + ' <a class="btn btn-xs btn-danger deleteskill" onclick="delskill('+ uniqid +'); return false;"> <span class="fa fa-times"></span></a></div>');
+        }
+        $('#addnewskill').val('');
+    }
+
+    $('#addexistingskill').change(function(event){
+        event.preventDefault();
+        var skillId = $(this).val();
+        var skillName = $("#addexistingskill option[value='"+ skillId +"']").text();
+        updateExistingSkills(skillName, skillId);
+        $('#addexistingskill option').removeAttr('selected');
+    });
+    
+        
+    function updateExistingSkills(name, id) {
+        //assume all get added as regular skill
+        $('.blockdata').each(function() { 
+            if (this.dataset.blockType == 'regularskills') {
+                var uniqid = Date.now();
+                $(this).append('<div class="form-group" id="'+ uniqid +'"><input type="hidden" name="fields[userSkills]['+ blocks['regularskills'] +'][fields][skills]['+ uniqid+']" value="' + id + '"><!--input type="checkbox"--> ' + name + ' <a class="btn btn-xs btn-danger deleteskill" onclick="delskill('+ uniqid +'); return false;"> <span class="fa fa-times"></span></a></div>'); 
+            }
+        });        
+    }
+    
+    function changeSkillType() {
+        //if a checkbox is clicked... get teh checked status.
+        //if checked make sure it's in favorite skills
+        //if it's unchecked make sure it's in regular skills
+    }
+{% endset %}
+
+{% includeJs editProfileJs %}
+
+{% endblock %}
+

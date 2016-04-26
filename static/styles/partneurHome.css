@@ -1,0 +1,112 @@
+/* Partneur homepage styles */
+
+/* partneur purple: #7c1cff rgba(124, 28, 255, 0)*/
+
+#header {
+    padding: 3em;
+    background-color: #dee6e9;
+    background-image: url('/static/images/hero-image-v2.jpg');
+    background-size: 100%;
+    background-position: center top;    
+ }
+ 
+#header #logo { float: left; margin-top: -.5em; }
+
+#header nav {
+    float: right;
+}
+#header nav ul li {
+    display: inline;
+    margin-right: 3em;
+    padding: .7em;
+}
+#header nav ul li a { 
+ color: #000;
+ text-transform: uppercase;
+}
+
+#header nav ul #login { 
+
+    border: 1px solid rgba(124, 28, 255, 1);
+    color: #7c1cff;
+    border-radius: .3em;
+}
+#header nav ul #login a {
+    color: #7c1cff;
+    text-transform: lowercase;
+}
+
+#funnel form {
+    /*clear: both;*/
+    /*background: #554077 url('hero-image-v2.jpg');
+    background-size: 100%;
+    background-position: center top;*/
+    min-height: 400px;
+    display: block;
+    padding: 4em;
+}
+#funnel h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin: 1em auto;
+}
+
+
+.p-input, .p-submit {
+    display: block;
+    width: 100%;
+    margin: 1em 0;
+    padding: .5em;
+    border-radius: .3em;
+    border: 1px solid rgba(124, 28, 255, .2);
+    /*
+    border: 0;
+    -webkit-box-shadow:  0px 0px 0px 1px rgba(124,28,255,0.3);
+    -moz-box-shadow:  0px 0px 0px 1px rgba(124,28,255,0.3);
+    box-shadow: 0px 0px 0px 1px rgba(124,28,255,0.3);
+    */
+    
+    /*border: 1px solid #7c1cff;*/
+}
+
+.p-submit { 
+ background-color: #7c1cff;
+ color: #fff;
+ font-weight: bold;
+ text-transform: uppercase;
+}
+
+.p-submit:hover {
+    background-color:rgba(124, 28, 255, .7);
+    /*color: #7c1cff;*/
+}
+
+
+
+
+#footer {
+    color: #fff;
+    background: #272727;
+    -webkit-box-shadow: 0px 500px 0px 500px #272727;
+    -moz-box-shadow: 0px 500px 0px 500px #272727;
+    box-shadow: 0px 500px 0px 500px #272727;
+    padding: 1.5em;
+}
+
+#footer ul {
+    text-align: center;
+    margin: auto;
+    }
+#footer li {
+    display: inline;
+    margin-right: 3em;
+    text-transform: capitalize;
+    }
+    #footer li a img { position: relative; top: -.5em; }
+    #footer li a { color: #fff; } 
+   /* #footer li a:hover { text-decoration: none; }*/
+
+#login {
+    cursor: pointer;
+}
+

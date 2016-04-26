@@ -1,0 +1,148 @@
+
+{% extends "_layout" %}
+{% set title = "Partneur Profile" %}
+{% set profileId = craft.request.getSegment(2) %}
+{% if profileId == 'me' and currentUser %}
+    {% set profileId = currentUser.id %}
+{% elseif profileId=='me' %}
+    {% redirect '/' %}
+{% endif %}
+
+
+{% block content %}
+
+{% for profile in craft.users if profile.id==profileId %}
+<div class="row">
+    <div id="profile">
+        <div class="row">
+            <div class="col-md-5" id="avatar">
+                <img src="{{profile.photoUrl(200) | default('/static/images/sir-not-appearing-in-this-film.jpg') }}" class='img-circle' /><br>
+                {% if currentUser and currentUser.id == profile.id %}
+                    <a class="p-button" href="/profiles/edit">edit profile</a>
+                {% elseif currentUser %}
+                    {% set followed = false %}
+                    {% for u in currentUser.followedUsers if u.id == profile.id %}
+                        {% set followed=true %}
+                    {% endfor %}
+                    {% if followed == false %}
+                        <form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+                            {{ getCsrfInput() }}
+                            <input type="hidden" name="action" value="users/saveUser">
+                            <input type="hidden" name="userId" value="{{ currentUser.id }}">
+                            {% for u in currentUser.followedUsers %}
+                                <input type="hidden" name="fields[followedUsers][]" value="{{u.id}}">
+                            {% endfor %}
+                            <input type="hidden" name="fields[followedUsers][]" value="{{profile.id}}">
+                            <button class="p-button">follow</button>
+                        </form>
+                    {% endif %}
+
+                    <a href="/messages/new?t={{profile.id}}" class="p-button">message</a>
+                {% else %}
+                    <a class="p-button" data-toggle="modal" data-target="#loginModal">Login or Signup to Contact</a>
+                {% endif %}
+            </div>
+        
+            <div class="col-md-7">
+                <h2>{{ profile.fullName |default('Sir Not Appearing In This Film') }}</h2>
+                <a class="p-button" href="/profiles?q={{profile.jobTitle}}">{{ profile.jobTitle | default('Coming Soon!') }}</a>
+                <p>{{ profile.bio }}</p>
+                <ul id="skills">
+                    {% for skillList in profile.userSkills %}
+                        {% for skill in skillList.skills if skill.approved %}
+                            
+                            {% if skillList.type=='favoriteskills' %}
+                                <li><a href="/profiles?q={{skill.title}}" class="p-button">{{skill}}</a></li>
+                            {% elseif skillList.type=='regularskills' %}
+                                <li><a href="/profiles?q={{skill.title}}" class="p-button">{{skill}}</a></li>
+                            {% endif %}
+                        {% endfor%} 
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% set followingCount = profile.followedUsers|length %}
+
+
+{% set followersCount = 0 %}
+{% set followers = [] %}
+{% for u in craft.users %}
+    {% for fu in u.followedUsers if fu.id==profile.id %}
+        {% set followersCount = followersCount + 1 %}
+        {% set followers = followers|merge([u])%}
+    {% endfor %}
+{% endfor %}
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="{% if currentUser %}col-sm-7{% else %}col-sm-12{% endif %}">
+            <div class="row">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation"><a href="#news" role="tab" data-toggle="tab">News</a></li>
+                    <li role="presentation"><a href="#followers" role="tab" data-toggle="tab">Followers ({{followersCount}})</a></li>
+                    <li role="presentation" class="active"><a href="#following" role="tab" data-toggle="tab">Following ({{followingCount}})</a></li>
+                </ul>
+                <br>
+            </div>
+
+            <div class="row">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade" id="news">
+                       <ul class="list">
+                            {% for post in craft.entries.section('news') %}
+                                <li>
+                                    <h4>{{post.title}}</h4>
+                                    {{post.body}}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="followers">
+                        {% include '_profileList' with {'users': followers} %}
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade in active" id="following">
+                        {% include '_profileList' with {'users': profile.followedUsers} %}
+                    </div>
+                </div>
+            </div>
+        </div>    
+        
+        {% if currentUser %}        
+        <div class="col-sm-4 col-sm-offset-1">
+
+ {# get one of the survey forms that hasn't been completed by this user #}        
+        
+        {% set surveys = [] %}
+        {% set sf = craft.sproutForms.getAllForms() %}
+        {% for form in sf if form.groupId==1%}
+            {% set surveys = surveys|merge([{'formId':form.id, 'handle': form.handle }]) %}
+        {% endfor %}
+        
+        {% set incompleteSurveys = [] %}
+        
+        {% for s in surveys %}
+            {% if currentUser.completedSurveys %}
+                {% for cs in currentUser.completedSurveys if cs.formId != s.formId %}
+                    {% set incompleteSurveys = incompleteSurveys|merge([s.handle]) %}
+                {% endfor %}
+            {% else %}
+                {% set incompleteSurveys = incompleteSurveys|merge([s.handle]) %}
+            {% endif %}
+        {% endfor %}
+
+        {{ craft.sproutForms.displayForm(random(incompleteSurveys)) }}
+
+        </div>
+                {% endif %}
+    </div>
+</div>
+
+{% endfor %}	
+{% endblock %}

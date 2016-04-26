@@ -1,0 +1,82 @@
+{% extends "_layout" %}
+{% set title = "Partneur Messages" %}
+
+{% requireLogin %}
+
+{% block content %}
+
+
+{% set to = craft.request.getQuery('t') %}
+{% if to=='' %}
+    {% set toUser = ''  %}
+{% else %}    
+    {% set toUser = craft.users.id(to).first() %}
+{% endif %}
+
+{% set reply = craft.request.getQuery('r') %}
+{% if reply !='' %}
+    {% set re = craft.entries.id(reply).first() %}
+    {% set replyTitle = 'RE: '~re.title %}
+{% endif %}
+
+{% set mailContacts = []%}
+{% for message in craft.entries.section('messages') %}
+    {% set inSet = false %}
+    {# check that they're not already in the list #}
+
+    {% if message.to.first.id == currentUser.id %}
+        {% for rc in mailContacts if message.from.first.id == rc.id %}
+            {% set inSet = true %}
+        {% endfor %}
+        {% if not inSet %}
+            {% set mailContacts = mailContacts|merge([message.from.first]) %}
+        {% endif %}
+    {% endif %}
+    
+{% endfor %}
+
+
+<div class="container">
+
+    
+<div class="row">
+    <div class="col-md-8">
+        <h1>Send Message</h1>
+
+        <form method="post" accept-charset="UTF-8">
+            <input type="hidden" name="action" value="entries/saveEntry">
+            <input type="hidden" name="sectionId" value="{{craft.sections.getSectionByHandle('messages').id }}">
+            <input type="hidden" name="enabled" value="1">
+            
+            
+            <input type="hidden" name="fields[from][0]" value="{{currentUser.id}}">
+            
+            {% if toUser != '' %}
+                <p><strong>To:</strong> <img src="{{toUser.photoUrl(25) | default('/static/images/sir-not-appearing-in-this-film.jpg') }}" class='img-circle' /> {{toUser.fullName}}</p>
+                <input type="hidden" name="fields[to][0]" value="{{toUser.id}}">
+            {% else %}
+                <p><strong>To:</strong> 
+                    <select name="fields[to][0]">
+                        {% for contact in mailContacts %}
+                            <option value="{{contact.id}}">{{contact.fullName}}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+
+            {% endif %}
+            
+            <input type="hidden" name="fields[read]" value="0">
+            <input type="text" name="title" placeholder="message title" class="p-input" value="{{ replyTitle|default()}}">
+            <textarea class="p-input" rows="5" name="fields[body]" placeholder="message body"></textarea>
+            <button class="p-button">Send Message</button>
+        </form>
+
+    </div>
+    <div class="col-md-4">
+        {% include '_recentContacts' %}
+    </div>
+</div>
+
+</div>
+{% endblock %}
+

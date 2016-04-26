@@ -1,0 +1,8 @@
+<h1>Sent message test:</h1>
+{% set recipients = craft.request.getParam('recipients') %}
+{% set subject = craft.request.getParam('subject') %}
+{% set body = craft.request.getParam('body') %}
+
+<p>Test recipients: {{recipients}}</p>
+<p>Test subject: {{subject}}</p>
+<p>Test body: {{body}}</p>

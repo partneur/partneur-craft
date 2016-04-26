@@ -1,0 +1,107 @@
+
+{% extends "_layout" %}
+{% set title = "Partneur Profile" %}
+
+{% set foundUsers = [] %}
+{% set query = craft.request.getParam('q') %}
+
+{% if query != '' %}
+    {# see if the query is found in a user's name #}
+    {% set foundUsers = craft.users.search('fullName:*'~query~'*').order('score') %}
+
+    {# add any users whose job titles match teh query #}
+    {% set jobUsers = craft.users.search('jobTitle:*'~query~'*').order('score') %}
+    {% for ju in jobUsers %}
+        {# only add the user if they aren't already in the results #}
+       {% set uniqueUser = true %}
+        {% for u in foundUsers if u.id== ju.id %}
+            {% set uniqueUser = false %}
+        {% endfor %}
+        {% if uniqueUser %}
+            {% set foundUsers = foundUsers|merge([ju]) %}
+        {% endif %}
+    {% endfor %}
+    
+    {# see if the query is found in a skill #}
+    {% set skillSearch = craft.entries.section('skills').search('*'~query~'*').order('score') %}
+    {# loop through all users to see if their skills match the skill search results #}
+    {% for user in craft.users.status('active') %}   
+        {% for skillList in user.userSkills %}
+            {% for skill in skillList.skills if skill.approved %}
+                {% for matchedSkill in skillSearch if skill.slug == matchedSkill.slug %}
+                    
+                    {% set uniqueUser = true %}
+                    {% for u in foundUsers if u.id== user.id %}
+                        {% set uniqueUser = false %}
+                    {% endfor %}
+                    {% if uniqueUser %}
+                        {% set foundUsers = foundUsers|merge([user]) %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor%} 
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+{% if foundUsers == [] %}
+    {% set foundUsers = craft.users.status('active') %}
+{% endif %}
+
+
+{% block content %}
+
+<div class="container">
+
+<div class="row">
+    <div class="col-sm-8">
+    
+<div class="well">
+
+<form class="clearfix">
+<div class="col-xs-9">
+    <input type="text" class="p-input" name="q" placeholder="search for users, jobs, or skills">
+    
+    </div>
+    <div class="col-xs-3">
+  <button type="submit" class="p-submit">Search</button>
+  
+  </div>
+</form>
+
+</div>
+        <h3>Users</h3>
+  
+<table class="table table-hover">
+
+<tbody>
+        {# could add another condition if profiles need a hidden field at some point #}
+        {% for user in foundUsers if user.status=='active' and user.firstName != '' %}
+            <tr>
+                <td><img src="{{user.photoUrl(75) | default('/static/images/sir-not-appearing-in-this-film.jpg') }}" class='img-circle' width="75" /></td>
+                <td><a href="/profiles/{{user.id}}"><strong>{{ user.jobTitle }}</strong><br>{{user.name}}</a></td>
+                <td>
+                     {% for skillList in user.userSkills %}{% for skill in skillList.skills %}{% if skill.approved %}<a href="/profiles?skill={{skill.slug}}">{{skill}}</a>{% if not loop.last %},&nbsp;{%endif %}{% endif %}{% endfor%}{#% if not loop.last %},&nbsp;{% endif %#}{% endfor%}
+                     <br><small>{{user.bio | slice(0,200) }}{% if user.bio| length > 200 %}...{% endif %}</small>
+                </td>
+            </tr>
+        {% endfor %}
+</tbody>
+</table>
+
+    </div>
+    <div class="col-sm-4">
+        <div class="well">
+            <h3>Popular Skills</h3>
+            <form method="get">
+            {% for skill in craft.entries.section('skills') if skill.approved %}
+                    <button class='p-button' type='submit' name='q' value='{{skill.slug}}'>{{skill.title}}</button>            
+            {% endfor %}
+
+            
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

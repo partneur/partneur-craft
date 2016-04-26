@@ -1,0 +1,68 @@
+
+{% extends "_layout" %}
+{% set title = "Partneur Messages" %}
+
+{% requireLogin %}
+
+{% block content %}
+
+    {% set messageId = craft.request.getSegment(2) %}
+    {% set message = craft.entries.id(messageId).first() %}
+
+    {% set authorized = false %}
+    {% for recipient in message.to if currentUser.id==recipient.id%}
+        {% set authorized = true %}
+        {{craft.partneur.markMessageRead(messageId)}}
+    {% endfor %}
+    {% for sender in message.from if currentUser.id==sender.id %}
+        {% set authorized = true %}
+    {% endfor %}
+    {% if not authorized and not currentUser.admin %}
+       {% redirect '/messages' %}
+    {% endif %}
+
+
+
+<div class="container">
+
+    
+<div class="row">
+    <div class="col-md-8">
+        <h3>{{message.title}} </h3>
+        <p><strong>From:</strong> 
+            <img src="{{message.from.first.photoUrl(25) }}" class='img-circle' />
+            <a href="/profiles/{{message.from.first.id}}">{{message.from.first.fullName}}</a>
+        </p>
+       {# <p>
+            To: 
+            {% for recipient in message.to %}
+                {% if recipient.id == currentUser.id %}
+                    {{recipient.fullName}} 
+                {% else %}
+                    <a href="/messages/send&to={{recipient.id}}">{{recipient.fullName}}</a> 
+                {% endif %}
+            {% endfor %}
+        </p>
+        #}
+        <div class="well">
+            {{message.body}}
+        </div>
+    
+        <a href="/messages/new?t={{message.from.first.id}}=&r={{message.id}}" class="p-button">reply</a>
+            <form method="post" accept-charset="UTF-8">
+                <input type="hidden" name="action" value="entries/saveEntry">
+                <input type="hidden" name="entryId" value="{{message.id}}">
+                <input type="hidden" name="sectionId" value="{{message.section.id}}">
+                <input type="hidden" name="enabled" value="0">
+                <input type="hidden" name="redirect" value="/messages">
+                <button class="p-button selected">delete</button>
+            </form>
+    </div>
+    <div class="col-md-4">
+        {% include '_recentContacts' %}
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
