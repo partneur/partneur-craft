@@ -19,7 +19,7 @@ return array(
 	'password' => 'Partneur360',
 
 	// The name of the database to select.
-	'database' => 'partneur_craft_test',
+	'database' => 'partneur_test_craft',
 
 	// The prefix to use when naming tables. This can be no more than 5 characters.
 	'tablePrefix' => 'craft',
