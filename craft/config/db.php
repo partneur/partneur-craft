@@ -13,13 +13,13 @@ return array(
 	'server' => 'localhost',
 
 	// The database username to connect with.
-	'user' => 'craftagent',
+	'user' => 'partneur',
 
 	// The database password to connect with.
-	'password' => 's3cur1ty',
+	'password' => 'Partneur360',
 
 	// The name of the database to select.
-	'database' => 'partneur',
+	'database' => 'partneur_craft_test',
 
 	// The prefix to use when naming tables. This can be no more than 5 characters.
 	'tablePrefix' => 'craft',
