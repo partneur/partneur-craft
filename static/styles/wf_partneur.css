@@ -121,11 +121,12 @@
 }
 
 .hero-section {
-  height: 600px;
-  margin-top: -93px;
+  position: static;
+  width: auto;
+  margin-top: -73px;
   background-image: url('../images/hero-image-v2.jpg');
-  background-position: 50% -106px;
-  background-size: 100%;
+  background-position: 67% 260%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
@@ -153,27 +154,42 @@
 .hero-container {
   position: relative;
   top: 127px;
-  margin-top: 66px;
-  margin-bottom: 66px;
+  margin-top: 55px;
+  margin-bottom: 55px;
 }
 
 .sign-up-form {
+  position: relative;
+  z-index: 100;
   display: block;
-  width: 450px;
-  margin: 62px auto;
+  width: 600px;
+  margin: -84px auto 138px;
+  padding-bottom: 5%;
 }
 
 .submit-button {
   display: block;
-  width: 100%;
-  margin-right: auto;
+  width: auto;
+  margin-top: -48px;
+  margin-right: -14px;
   margin-left: auto;
-  border-radius: 4px;
-  background-color: #8917f3;
+  padding-top: 11px;
+  border-radius: 6px;
+  background-color: transparent;
+  background-image: -webkit-linear-gradient(0deg, #eedc08, #ff8500);
+  background-image: linear-gradient(90deg, #eedc08, #ff8500);
+  -webkit-transition: background-color 350ms ease, all 350ms ease;
+  transition: background-color 350ms ease, all 350ms ease;
+}
+
+.submit-button:hover {
+  background-image: -webkit-linear-gradient(0deg, #ffeb00, #f90);
+  background-image: linear-gradient(90deg, #ffeb00, #f90);
 }
 
 .name-field {
   border-radius: 4px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .email-field {
@@ -182,10 +198,155 @@
 
 .mission-statement {
   position: static;
-  padding-top: 107px;
-  padding-bottom: 107px;
+  margin-top: 52px;
+  margin-bottom: 37px;
+  padding-top: 14px;
+  padding-bottom: 14px;
   font-family: Montserrat, sans-serif;
   text-align: center;
+}
+
+.our-vision-section {
+  position: static;
+  top: -139px;
+  height: 850px;
+  background-image: -webkit-linear-gradient(180deg, #c350ff, #693aff);
+  background-image: linear-gradient(270deg, #c350ff, #693aff);
+}
+
+.our-values-heading {
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  text-align: center;
+}
+
+.values-slider {
+  height: 535px;
+  margin-top: 6px;
+  background-color: hsla(0, 0%, 87%, 0);
+}
+
+.matching-icon {
+  display: block;
+  margin: 36px auto;
+}
+
+.matching-heading {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.value-slide-paragraph {
+  display: block;
+  width: 300px;
+  margin-right: auto;
+  margin-left: auto;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+}
+
+.heading {
+  margin-top: 52px;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+.heading.our-values {
+  color: #fff;
+}
+
+.our-values-section {
+  height: 600px;
+  background-color: #e6e6e6;
+}
+
+.tagline-section {
+  height: 100px;
+  background-color: #8917f3;
+}
+
+.tagline {
+  padding-top: 40px;
+  font-family: Georgia, Times, 'Times New Roman', serif;
+  color: #fff;
+  font-size: 49px;
+  font-style: italic;
+  text-align: center;
+}
+
+.footer {
+  background-color: #1a1a1a;
+}
+
+.footer-container {
+  padding-top: 49px;
+  padding-bottom: 49px;
+}
+
+.footer-text {
+  padding-top: 11px;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  text-align: center;
+}
+
+.footer-logo {
+  margin-right: 40%;
+  margin-left: 40%;
+}
+
+.keyword-slider {
+  z-index: 99;
+  height: 250px;
+  background-color: hsla(0, 0%, 100%, 0);
+}
+
+.keyword-1 {
+  height: 60px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  color: #8917f3;
+}
+
+.keywords {
+  font-family: Montserrat, sans-serif;
+  font-size: 70px;
+  text-align: center;
+}
+
+.hero-slider {
+  height: 650px;
+}
+
+.slide-2 {
+  background-image: url('../images/slide2.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.slide-1 {
+  background-image: url('../images/hero-image-v2.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.our-vision-container {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 5%;
 }
 
 @media (max-width: 991px) {
@@ -208,10 +369,54 @@
   .menu-button {
     margin-right: -69%;
   }
+  .hero-section {
+    height: 750px;
+    background-size: cover;
+  }
+  .sign-up-form {
+    display: block;
+    width: 389px;
+    margin: -31px auto;
+  }
   .mission-statement {
+    display: block;
     width: 94%;
-    margin-right: 25px;
-    margin-left: 25px;
+    margin-top: -124px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 105px;
+  }
+  .our-vision-section {
+    position: static;
+    display: block;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+  .matching-icon {
+    margin-right: 38%;
+    margin-left: 38%;
+  }
+  .value-slide-paragraph {
+    margin-right: 30%;
+    margin-left: 30%;
+  }
+  .footer-text {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .footer-logo {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .hero-slider {
+    height: 710px;
+  }
+  .slide-1 {
+    background-position: 50% 50%;
+    background-size: cover;
   }
 }
 
@@ -219,10 +424,57 @@
   .logo {
     margin-left: 20px;
   }
+  .hero-section {
+    background-position: 100% 0px;
+    background-size: cover;
+  }
+  .sign-up-form {
+    display: block;
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 1px;
+  }
+  .submit-button {
+    display: block;
+    width: auto;
+    height: 38px;
+    margin-right: auto;
+    margin-left: auto;
+    float: right;
+  }
+  .name-field {
+    display: block;
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    float: left;
+  }
   .mission-statement {
     width: 87%;
+    margin-top: -151px;
     margin-right: 7%;
     margin-left: 7%;
+  }
+  .matching-icon {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .value-slide-paragraph {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .heading.our-values {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .bullet-navigation {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
   }
 }
 
@@ -235,18 +487,104 @@
     margin-top: -50px;
     margin-right: 56%;
   }
+  .hero-section {
+    display: block;
+    width: 100%;
+    height: 494px;
+    background-image: none;
+  }
   .sign-up-form {
-    width: 75%;
-    margin-top: -127px;
+    display: block;
+    width: 95%;
+    margin-top: -74px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .submit-button {
+    display: block;
+    width: auto;
+    margin-top: 21px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    float: none;
+  }
+  .name-field {
+    display: block;
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    float: none;
   }
   .mission-statement {
-    width: 73%;
-    margin-top: -239px;
-    margin-right: 12%;
-    margin-left: 12%;
-    padding-top: 211px;
-    padding-bottom: 211px;
-    font-size: 27px;
+    display: block;
+    margin-top: -107px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 0px;
+    font-size: 19px;
+  }
+  .our-vision-section {
+    display: block;
+  }
+  .matching-icon {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .value-slide-paragraph {
+    display: block;
+    width: 209px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .tagline {
+    font-size: 30px;
+  }
+  .footer-text {
+    display: block;
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .footer-logo {
+    margin-right: 31%;
+    margin-left: 31%;
+  }
+  .keyword-slider {
+    display: block;
+    height: 217px;
+    margin-top: -43px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .keyword-1 {
+    margin-top: -25px;
+  }
+  .keywords {
+    display: block;
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 31px;
+  }
+  .keyword-mask {
+    height: 100px;
+  }
+  .bullet-navigation {
+    padding-top: 45px;
+  }
+  .hero-slider {
+    height: 100%;
+    clear: both;
+  }
+  .slide-1 {
+    display: inline-block;
+    background-image: url('../images/hero-image-v2.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 }
 

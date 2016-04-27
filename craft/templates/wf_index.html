@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- Last Published: Fri Apr 22 2016 00:02:42 GMT+0000 (UTC) -->
+<html data-wf-site="56e995fbf509295c4b4a7832" data-wf-page="56e995fbf509295c4b4a7833">
+<head>
+  <meta charset="utf-8">
+  <title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  	{% includeCssFile "/static/libs/bootstrap-3.3.6-dist/css/bootstrap.min.css" %}
+	{% includeCssFile "/static/libs/font-awesome-4.5.0/css/font-awesome.min.css" %}
+	{% includeCssFile "/static/styles/partneurHome.css" %}
+	{% includeJsFile "/static/scripts/jquery-2.2.1.min.js" first %}
+	{% includeJsFile "/static/libs/bootstrap-3.3.6-dist/js/bootstrap.min.js" %}
+  
+  {% includeCssFile "/static/styles/wf_normalize.css" %}
+  {% includeCssFile "/static/styles/wf_components.css" %}
+  {% includeCssFile "/static/styles/wf_partneur.css" %}
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+  <script>
+    WebFont.load({
+        google: {
+          families: ["Montserrat:400,700","Open Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic","Roboto:100,regular,italic,500,700,900"]
+        }
+      });
+  </script>
+  {% includeJsFile "/static/scripts/wf_modernizr.js" %}
+  <link rel="shortcut icon" type="image/x-icon" href="https://daks2k3a4ib2z.cloudfront.net/img/favicon.ico">
+  <link rel="apple-touch-icon" href="https://daks2k3a4ib2z.cloudfront.net/img/webclip.png">
+</head>
+<body class="body">
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-contain="1" class="w-nav navbar">
+    <div class="w-container nav">
+      <a href="#" class="w-nav-brand logo">
+        <img width="122" src="images/wf_partneur-logo.png">
+      </a>
+      <nav role="navigation" class="w-nav-menu">
+        <a href="/profiles" class="w-nav-link">People</a>
+        <a href="#" class="w-nav-link">Projects</a>
+      </nav>
+      <div class="w-nav-button">
+        <div class="w-icon-nav-menu"></div>
+      </div>
+    </div>
+  </div>
+  <div class="w-section hero-section">
+    <div data-animation="slide" data-duration="500" data-infinite="1" class="w-slider hero-slider">
+      <div class="w-slider-mask">
+        <div class="w-slide slide-1">
+          <div class="w-container hero-container">
+            <h1 class="mission-statement">Our mission is to connect the worlds of doers.</h1>
+            <div data-animation="slide" data-duration="500" data-infinite="1" data-delay="2600" data-autoplay="1" class="w-slider keyword-slider">
+              <div class="w-slider-mask keyword-mask">
+                <div class="w-slide keyword-1">
+                  <div class="keywords">Engineers</div>
+                </div>
+                <div class="w-slide keyword-1">
+                  <div class="keywords">Artists</div>
+                </div>
+                <div class="w-slide keyword-1">
+                  <div class="keywords">Inventors</div>
+                </div>
+                <div class="w-slide keyword-1">
+                  <div class="keywords">Hobbyists</div>
+                </div>
+                <div class="w-slide keyword-1">
+                  <div class="keywords">Entrepeneurs</div>
+                </div>
+              </div>
+            </div>
+            <div class="w-form sign-up-form">
+              <form id="email-form" name="email-form" data-name="Email Form">
+                <input id="emal" type="text" placeholder="email" name="emal" data-name="emal" class="w-input name-field">
+                <input type="submit" value="REQUEST AN INVITE" data-wait="Please wait..." class="w-button submit-button">
+              </form>
+              <div class="w-form-done">
+                <p>Thank you! Your submission has been received!</p>
+              </div>
+              <div class="w-form-fail">
+                <p>Oops! Something went wrong while submitting the form</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-slide slide-2"></div>
+      </div>
+      <div class="w-slider-arrow-left">
+        <div class="w-icon-slider-left"></div>
+      </div>
+      <div class="w-slider-arrow-right">
+        <div class="w-icon-slider-right"></div>
+      </div>
+    </div>
+  </div>
+  <div class="w-section our-vision-section">
+    <div class="w-container our-vision-container">
+      <h1 class="heading our-values">Our Vision</h1>
+      <div data-animation="slide" data-duration="500" data-infinite="1" class="w-slider values-slider">
+        <div class="w-slider-mask">
+          <div class="w-slide">
+            <img width="200" src="images/wf_matching-icon.png" class="matching-icon">
+            <h1 class="matching-heading">Matching</h1>
+            <p class="value-slide-paragraph">Combining a website and machine learning can produce powerful results. Partneur's goal and vision is to create a website that already knows&nbsp; the perfect startup partner for you. Simply enter your skills, your project and the kind of people you are looking and let our matching algorithm do the rest.</p>
+          </div>
+          <div class="w-slide">
+            <img width="170" src="images/wf_insight-icon.png" class="matching-icon">
+            <h1 class="matching-heading">Insight</h1>
+            <p class="value-slide-paragraph">Gain true insight into your project with community contributions and feedback. Use data to gage interest, and find the best route to success.</p>
+          </div>
+          <div class="w-slide">
+            <img width="160" src="images/wf_community-icon.png" class="matching-icon">
+            <h1 class="matching-heading">community</h1>
+            <p class="value-slide-paragraph">The Partneur community is our top priority. It's our vision to create the worlds best online community to connect with other inspiring entrepreneurs and build a business plan surrounding your startup's plan for success.</p>
+          </div>
+        </div>
+        <div class="w-slider-arrow-left">
+          <div class="w-icon-slider-left"></div>
+        </div>
+        <div class="w-slider-arrow-right">
+          <div class="w-icon-slider-right"></div>
+        </div>
+        <div class="w-slider-nav w-round bullet-navigation"></div>
+      </div>
+    </div>
+  </div>
+  <div class="w-section our-values-section">
+    <div class="w-container">
+      <h1 class="heading">Our Values</h1>
+    </div>
+  </div>
+  <div class="w-section tagline-section">
+    <div class="w-container">
+      <div class="tagline">Connect. Learn. Do.</div>
+    </div>
+  </div>
+  <div class="w-section footer">
+    <div class="w-container footer-container">
+      <img width="175" src="images/wf_partneur-logo-white.png" class="footer-logo">
+      <div class="footer-text">© Partneur All Rights Reserved 2016. Terms of Service &nbsp;| &nbsp;Privacy Policy</div>
+    </div>
+  </div>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  {% includeJsFile "/static/scripts/partneur.js" %}
+  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+</body>
+</html>
