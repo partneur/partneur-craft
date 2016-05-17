@@ -1,0 +1,143 @@
+{#
+ # Layout template
+ # ---------------
+ #
+ # This template defines your site’s global layout. It can be
+ # “extended” by other templates to fill in the gaps.
+ #
+ # See Twig’s Template Inheritance documentation for more details:
+ # http://twig.sensiolabs.org/doc/templates.html#template-inheritance
+ #}
+
+
+{% set title = "Partneur" %}
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+	<meta charset="utf-8" />
+	<title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
+	<link rel="home" href="{{ siteUrl }}" />
+	
+	{% includeCssFile "/static/libs/bootstrap-3.3.6-dist/css/bootstrap.min.css" %}
+	{% includeCssFile "/static/libs/font-awesome-4.5.0/css/font-awesome.min.css" %}
+	{% includeCssFile "/static/styles/partneurHome.css" %}
+	{% includeJsFile "/static/scripts/jquery-2.2.1.min.js" first %}
+	{% includeJsFile "/static/libs/bootstrap-3.3.6-dist/js/bootstrap.min.js" %}
+
+</head>
+
+<body>
+		<header id="header" class="clearfix">
+		    	<a id="logo" href="/"><img src="/static/images/partneur-logo.png" height="25px" /></a>
+        <nav>
+            <ul>
+                <li><a href="/how-it-works">how it works</a></li>
+                <!--li><a href="/projects">projects</a></li-->
+                <li><a href="/profiles">people</a></li>
+                {% if currentUser %}
+                    <li><a href="/profiles/{{ currentUser.id }}">
+                        {% if currentUser.photoUrl %}<img src="{{currentUser.photoUrl(25)}}" class='img-circle' />{% else %}<span class="fa fa-user"></span>{% endif %}</a></li>
+                    <li><a href="/logout">logout</a></li>
+                {% else %}
+                    <li id="login"><a data-toggle="modal" data-target="#loginModal">log in{# / sign up #}</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="funnel" class="col-sm-6 col-sm-offset-3">
+
+            <form method="post" accept-charset="UTF-8" >
+                {{ getCsrfInput() }}
+                <input type="hidden" name="action" value="users/saveUser">
+                <input type="hidden" name="redirect" value="/profiles/edit">
+
+                {% macro errorList(errors) %}
+                    {% if errors %}
+                        <ul class="errors">
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endmacro %}
+
+                {% from _self import errorList %}
+
+                <h1>Find the perfect partner for your startup.</h1>
+                <input type="text" placeholder="e-mail" name="email" class="p-input" 
+                {%- if account is defined %} value="{{ account.email }}"{% endif %} />
+                {% if account is defined %}
+                        {{ errorList(account.getErrors('email')) }}
+                    {% endif %}
+                        
+                <input type="password" name="password" placeholder="password" class="p-input" />
+                    {% if account is defined %}
+                        {{ errorList(account.getErrors('password')) }}
+                    {% endif %}
+                <button type="submit" class="p-submit">Request An Invite</button>
+            </form>
+        </div>
+		</header>
+
+		<main id="content" role="main" class="container">
+		    <div class="col-sm-6">
+            <h2 style="text-align: center;">Latest News</h2>
+            <ul class="list">
+            {% for post in craft.entries.section('news') %}
+                <li>
+                    <h4>{{post.title}}</h4>
+                    {{post.body}}
+                </li>
+            {% endfor %}
+            </ul>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1">
+                            <h2 style="text-align: center;">new users</h2>
+                <div class="well">
+
+                <ul class="user-list">
+                {% for currentUser in craft.users().limit(7) if currentUser.fullName != '' %}
+                    <li style="list-style:none; display:block; clear: both; margin: 1em auto; padding-bottom: 1em; border-bottom: 1px solid #e0e0e0;">
+                        <a href="/profiles/{{ currentUser.id }}">
+                            {% if currentUser.photoUrl %}
+                                <img src="{{currentUser.photoUrl(50)}}" class='img-circle' style="display: block; float:left;margin-right: 14px; margin-bottom: 14px;" />
+                            {% else %}
+                                <span class="fa fa-user" style="font-size: 40px;position: relative; display: block; float: left;margin:  0 23px 14px 9px;"></span>
+                            {% endif %}
+                            {{currentUser.fullName}}<br />{{currentUser.jobTitle}}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            </div>
+		</main>
+
+	<footer id="footer">
+	    
+	    <ul>
+	        <li class="pull-left"><a href="/"><img src="/static/images/partneur-logo-white.png" height="25px"/></a></li>
+	        <li><a href="/profiles">people</a></li>
+	        <!--li><a href="#">projects</a></li-->
+	        <li><a href="how-it-works">how it works</a></li>
+	        <li><a href="#">contact us</a></li>
+	        {% if not currentUser %}
+	            <li><a data-toggle="modal" data-target="#loginModal">log in</a></li>
+	            <li><a href="/">register</a></li>
+	        {% endif %}
+	        <li class="pull-right">all rights reserved. &copy; partneur {{ now.year }}</li>
+	    </ul>
+
+	</footer>
+
+	
+	
+	{% include '_login_modal.html' %}
+</body>
+</html>
+
+
+
+
