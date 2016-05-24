@@ -5,6 +5,5 @@
 # Craft Storage (cache) [http://buildwithcraft.com/help/craft-storage-gitignore]
 /craft/storage/*
 !/craft/storage/logo/*
+!/craft/storage/userphotos/*
 /design/*
-/static/images/*
-/static/fonts/*
