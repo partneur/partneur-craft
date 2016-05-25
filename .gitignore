@@ -1,9 +1,5 @@
-# Created by https://www.gitignore.io/api/craftcms
-# This site is rad
-
-### CraftCMS ###
 # Craft Storage (cache) [http://buildwithcraft.com/help/craft-storage-gitignore]
-/craft/storage/*
-!/craft/storage/logo/*
-!/craft/storage/userphotos/*
+*.gz
+*.zip
+/craft/storage/runtime/*
 /design/*
