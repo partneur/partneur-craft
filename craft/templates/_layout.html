@@ -44,7 +44,8 @@
 		            <li><a href="/profiles/{{ currentUser.id }}">{% if currentUser.photoUrl %}<img src="{{currentUser.photoUrl(25)}}" class='img-circle' />{% else %}<span class="fa fa-user"></span>{% endif %}</a></li>
 		            <li><a href="/logout">logout</a></li>
 		        {% else %}
-		            <li><a id="login" data-toggle="modal" data-target="#loginModal">login / signup</a></li>
+		            <!--li><a id="login" data-toggle="modal" data-target="#loginModal">login / signup</a></li-->
+		            <li><a id="login" href="login">login / signup</a></li>
 		        {% endif %}
 	        </ul>
 	    </nav>
