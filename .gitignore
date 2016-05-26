@@ -3,3 +3,4 @@
 *.zip
 /craft/storage/runtime/*
 /design/*
+/.vagrant/*
