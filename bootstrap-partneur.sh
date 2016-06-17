@@ -1,6 +1,6 @@
 #!/bin/bash
-rm -rf ~/public_html
-ln -sf /vagrant ~/public_html
+rm -rf /var/www/html
+ln -sf /vagrant /var/www/html
 mysql -uroot -pvagrant < /vagrant/create-craft-db.sql
 
 ## Borrowed from craftyvagrant db script
