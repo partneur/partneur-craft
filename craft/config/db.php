@@ -5,23 +5,25 @@
  *
  * All of your system's database configuration settings go in here.
  * You can see a list of the default settings in craft/app/etc/config/defaults/db.php
+ * 
+ * https://craftcms.com/docs/multi-environment-configs
  */
 
+
 return array(
-
-	// The database server name or IP address. Usually this is 'localhost' or '127.0.0.1'.
-	'server' => 'localhost',
-
-	// The database username to connect with.
-	'user' => 'root',
-
-	// The database password to connect with.
-	'password' => 'vagrant',
-
-	// The name of the database to select.
-	'database' => 'craft',
-
-	// The prefix to use when naming tables. This can be no more than 5 characters.
-	'tablePrefix' => 'craft',
-
+    '*' => array(
+        'tablePrefix' => 'craft',
+    ),
+    '.dev' => array(
+        'server' => 'localhost',
+        'user' => 'root',
+        'password' => 'vagrant',
+        'database' => 'craft',
+    ),
+    '.com' => array(
+        'server' => 'localhost',
+        'user' => 'partneur',
+        'password' => 'Partneur360',
+        'database' => 'partneur_craft',
+    ),
 );
