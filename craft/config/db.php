@@ -20,10 +20,17 @@ return array(
         'password' => 'vagrant',
         'database' => 'craft',
     ),
+    'test.partneur.com' => array(
+        'server' => 'localhost',
+        'user' => 'partneur',
+        'password' => 'Partneur360',
+        'database' => 'partneur_test_craft',
+    ),
     '.com' => array(
         'server' => 'localhost',
         'user' => 'partneur',
         'password' => 'Partneur360',
         'database' => 'partneur_craft',
     ),
+    
 );
