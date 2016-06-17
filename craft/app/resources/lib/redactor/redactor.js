@@ -1,11 +1,11 @@
 /*
 	Redactor II
-	Version 1.2.2
-	Updated: February 18, 2015
+	Version 1.2.4
+	Updated: May 21, 2015
 
 	http://imperavi.com/redactor/
 
-	Copyright (c) 2009-2015, Imperavi LLC.
+	Copyright (c) 2009-2016, Imperavi LLC.
 	License: http://imperavi.com/redactor/license/
 
 	Usage: $('#content').redactor();
@@ -101,7 +101,7 @@
 
 	// Options
 	$.Redactor = Redactor;
-	$.Redactor.VERSION = '1.2.2';
+	$.Redactor.VERSION = '1.2.4';
 	$.Redactor.modules = ['air', 'autosave', 'block', 'buffer', 'build', 'button', 'caret', 'clean', 'code', 'core', 'detect', 'dropdown',
 						  'events', 'file', 'focus', 'image', 'indent', 'inline', 'insert', 'keydown', 'keyup',
 						  'lang', 'line', 'link', 'linkify', 'list', 'marker', 'modal', 'observe', 'offset', 'paragraphize', 'paste', 'placeholder',
@@ -142,8 +142,8 @@
 		pastePlainText: false,
 		pasteImages: true,
 		pasteLinks: true,
-		pasteBlockTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'tbody', 'thead', 'tfoot', 'th', 'tr', 'td', 'ul', 'ol', 'li', 'blockquote', 'pre', 'figure', 'figcaption'],
-		pasteInlineTags: ['strong', 'b', 'u', 'em', 'i', 'code', 'del', 'ins', 'samp', 'kbd', 'sup', 'sub', 'mark', 'var', 'cite', 'small'],
+		pasteBlockTags: ['pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'tbody', 'thead', 'tfoot', 'th', 'tr', 'td', 'ul', 'ol', 'li', 'blockquote', 'p', 'figure', 'figcaption'],
+		pasteInlineTags: ['br', 'strong', 'ins', 'code', 'del', 'samp', 'kbd', 'sup', 'sub', 'mark', 'var', 'cite', 'small', 'b', 'u', 'em', 'i'],
 
 		preClass: false, // string
 		preSpaces: 4, // or false
@@ -1049,6 +1049,11 @@
 			return {
 				set: function(type)
 				{
+    				if (typeof type === 'undefined')
+                    {
+                        this.buffer.clear();
+                    }
+
 					if (typeof type === 'undefined' || type === 'undo')
 					{
 						this.buffer.setUndo();
@@ -1112,6 +1117,10 @@
 					this.buffer.getRedo();
 
 					this.selection.restore();
+				},
+				clear: function()
+				{
+    				this.opts.rebuffer = [];
 				}
 			};
 		},
@@ -2096,6 +2105,7 @@
 					var inline = this.utils.isInlineTag(node.tagName);
 					if (node.innerHTML === '' || inline)
 					{
+                        sel = window.getSelection();
 					    range = document.createRange();
 						var textNode = document.createTextNode('\u200B');
 
@@ -2103,7 +2113,7 @@
 						range.insertNode(textNode);
 						range.setStartAfter(textNode);
 						range.collapse(true);
-						sel = window.getSelection();
+
 						sel.removeAllRanges();
 						sel.addRange(range);
 
@@ -2127,7 +2137,6 @@
 						range.selectNodeContents(node);
 						range.collapse(true);
 						sel.addRange(range);
-
 					}
 
 
@@ -2492,6 +2501,10 @@
 					// if paste event
 					if (insert !== true)
 					{
+    					// remove google docs markers
+                        html = html.replace(/<b\sid="internal-source-marker(.*?)">([\w\W]*?)<\/b>/gi, "$2");
+    					html = html.replace(/<b(.*?)id="docs-internal-guid(.*?)">([\w\W]*?)<\/b>/gi, "$3");
+
 						var msword = this.clean.isHtmlMsWord(html);
 						if (msword)
 						{
@@ -2668,6 +2681,8 @@
 				},
 				cleanMsWord: function(html)
 				{
+    				html = html.replace(/<!--[\s\S]*?-->/g, "");
+    				html = html.replace(/<o:p>[\s\S]*?<\/o:p>/gi, '');
 					html = html.replace(/\n/g, " ");
 					html = html.replace(/<br\s?\/?>|<\/p>|<\/div>|<\/li>|<\/td>/gi, '\n\n');
 
@@ -2732,7 +2747,6 @@
 						}
 					}
 
-
 					return html;
 
 				},
@@ -2755,6 +2769,7 @@
 						return html;
 					}
 
+
 					var blockTags = (data.lists) ? ['ul', 'ol', 'li'] : this.opts.pasteBlockTags;
 
 					var tags;
@@ -2771,16 +2786,16 @@
 					for (var i = 0; i < len; i++)
 					{
 						html = html.replace(new RegExp('###/' + tags[i] + '###', 'gi'), '</' + tags[i] + '>');
+						html = html.replace(new RegExp('###' + tags[i] + '###', 'gi'), '<' + tags[i] + '>');
+                    }
 
-						if (tags[i] === 'td' || tags[i] === 'th')
-						{
-							html = html.replace(new RegExp('###' + tags[i] + '\s?(.*?[^#])###', 'gi'), '<' + tags[i] + '$1>');
-						}
-						else
-						{
-							html = html.replace(new RegExp('###' + tags[i] + '###', 'gi'), '<' + tags[i] + '>');
-						}
-					}
+					for (var i = 0; i < len; i++)
+					{
+                        if (tags[i] === 'td' || tags[i] === 'th')
+                        {
+						    html = html.replace(new RegExp('###' + tags[i] + '\s?(.*?[^#])###', 'gi'), '<' + tags[i] + '$1>');
+                        }
+                    }
 
 					return html;
 
@@ -2989,6 +3004,7 @@
 				start: function(html)
 				{
 					html = $.trim(html);
+					html = html.replace(/^(<span id="selection-marker-1" class="redactor-selection-marker">​<\/span>)/, '');
 
 					// clean
 					if (this.opts.type === 'textarea')
@@ -3033,7 +3049,7 @@
 					if (this.opts.type === 'textarea')
 					{
 						return this.core.textarea().val();
-					}
+                    }
 					else
 					{
 						var html = this.core.editor().html();
@@ -3854,7 +3870,7 @@
 					this.observe.load();
 
 					// target
-					if ((this.opts.type === 'textarea' || this.opts.type === 'div') && mutation.target === this.core.editor()[0])
+					if ((this.opts.type === 'textarea' || this.opts.type === 'div') && (!this.detect.isFirefox() && mutation.target === this.core.editor()[0]))
 					{
 						stop = true;
 					}
@@ -4272,7 +4288,7 @@
 
 					if (this.opts.imageCaption === false)
 					{
-						$('#redactor-image-caption').val('').hide();
+						$('#redactor-image-caption').val('').hide().prev().hide();
 					}
 					else
 					{
@@ -4408,7 +4424,7 @@
 					this.events.stopDetectChanges();
 
 					var $link = $image.closest('a', this.core.editor()[0]);
-					var $figure = $image.closest('figure, p', this.core.editor()[0]);
+					var $figure = $image.closest('figure', this.core.editor()[0]);
 					var $parent = $image.parent();
 
 					if ($('#redactor-image-box').length !== 0)
@@ -5101,13 +5117,14 @@
 						if (inline)
 						{
 							// remove same tag inside
-							var $div = $("<div/>").html($.parseHTML(html, document, true));
+							var $div = $("<div/>").html(html);
 							$div.find(inline.tagName.toLowerCase()).each(function()
 							{
 								$(this).contents().unwrap();
 							});
 
 							html = $div.html();
+
 						}
 
 						if (this.utils.isSelectAll())
@@ -5148,6 +5165,7 @@
 					}
 
 					this.placeholder.hide();
+					this.core.editor().focus();
 
 					// blocks
 					var blocks = this.selection.blocks();
@@ -5708,13 +5726,13 @@
 								return false;
 							}
 						}
+
 					}
 					// outside
 					else if (!this.keydown.block)
 					{
 						return this.keydown.insertParagraph(e);
 					}
-
 
 					// remove inline tags in new-empty paragraph
 					setTimeout($.proxy(function()
@@ -5724,7 +5742,20 @@
 						{
 							var parent = this.selection.block();
 							$(inline).remove();
-							this.caret.start(parent);
+							//this.caret.start(parent);
+
+                            var range = document.createRange();
+                            range.setStart(parent, 0);
+
+                            var textNode = document.createTextNode('\u200B');
+
+                            range.insertNode(textNode);
+                            range.setStartAfter(textNode);
+                            range.collapse(true);
+
+                            var sel = window.getSelection();
+            				sel.removeAllRanges();
+            				sel.addRange(range);
 						}
 
 					}, this), 1);
@@ -6033,12 +6064,26 @@
 				replaceToParagraph: function(tag)
 				{
 					var blockElem = this.selection.block();
+
 					var blockHtml = blockElem.innerHTML.replace(/<br\s?\/?>/gi, '');
 					if (blockElem.tagName === tag && this.utils.isEmpty(blockHtml) && !$(blockElem).hasClass('redactor-in'))
 					{
 						var p = document.createElement('p');
 						$(blockElem).replaceWith(p);
-						this.caret.start(p);
+
+                        // caret to p
+                        var range = document.createRange();
+                        range.setStart(p, 0);
+
+                        var textNode = document.createTextNode('\u200B');
+
+                        range.insertNode(textNode);
+                        range.setStartAfter(textNode);
+                        range.collapse(true);
+
+                        var sel = window.getSelection();
+        				sel.removeAllRanges();
+        				sel.addRange(range);
 
 						return false;
 					}
@@ -6124,6 +6169,7 @@
 			return {
 				init: function(e)
 				{
+
 					if (this.rtePaste)
 					{
 						return;
@@ -6157,7 +6203,6 @@
                         }
                     }
 
-
 					// replace figure to paragraph
 					if (key === this.keyCode.BACKSPACE || key === this.keyCode.DELETE)
 					{
@@ -6168,13 +6213,13 @@
 							return;
 						}
 
-
 						// if caret before figure - delete image
 						if (this.keyup.block && this.keydown.block && this.keyup.block.tagName === 'FIGURE' && this.utils.isStartOfElement(this.keydown.block))
 						{
     						e.preventDefault();
 
                             this.selection.save();
+                            $(this.keyup.block).find('figcaption').remove();
     						$(this.keyup.block).find('img').first().remove();
     						this.utils.replaceToTag(this.keyup.block, 'p');
 
@@ -6810,6 +6855,7 @@
 					this.placeholder.hide();
 					this.buffer.set();
 
+
 					if ($list.length !== 0 && $list[0].tagName === tag && this.utils.isRedactorParent($list))
 					{
 						this.selection.save();
@@ -6825,7 +6871,6 @@
 						});
 
 						$list.find('ul, ol').remove();
-
 						$list.find('li').each(function()
 						{
 							return $(this).replaceWith(function()
@@ -6844,8 +6889,22 @@
 						return;
 					}
 
+
 					this.selection.save();
-					document.execCommand('insert' + cmd);
+
+					if ($list.length !== 0 && $list[0].tagName !== tag)
+					{
+                        $list.each($.proxy(function(i,s)
+                        {
+                            this.utils.replaceToTag(s, tag);
+
+                        }, this));
+					}
+					else
+					{
+					    document.execCommand('insert' + cmd);
+					}
+
 					this.selection.restore();
 
 					var $insertedList = this.list.get();
@@ -7800,7 +7859,7 @@
 						this.paragraphize.z++;
 						this.paragraphize.safes[this.paragraphize.z] = s.outerHTML;
 
-						return $(s).replaceWith('\n{replace' + this.paragraphize.z + '}\n\n');
+						return $(s).replaceWith('\n#####replace' + this.paragraphize.z + '#####\n\n');
 
 
 					}, this));
@@ -7813,7 +7872,7 @@
 					$.each(this.paragraphize.safes, function(i,s)
 					{
 						s = (typeof s !== 'undefined') ? s.replace(/\$/g, '&#36;') : s;
-						html = html.replace('{replace' + i + '}', s);
+						html = html.replace('#####replace' + i + '#####', s);
 
 					});
 
@@ -7852,7 +7911,9 @@
 				},
 				clear: function(html)
 				{
-					html = html.replace(/<p>(.*?){replace(.*?)\}\s?<\/p>/gi, '{replace$2}');
+
+					html = html.replace(/<p>(.*?)#####replace(.*?)#####\s?<\/p>/gi, '<p>$1</p>#####replace$2#####');
+					html = html.replace(/(<br\s?\/?>){2,}<\/p>/gi, '</p>');
 
 					html = html.replace(new RegExp('</blockquote></p>', 'gi'), '</blockquote>');
 					html = html.replace(new RegExp('<p></blockquote>', 'gi'), '</blockquote>');
@@ -7879,10 +7940,10 @@
 				init: function(e)
 				{
 					this.rtePaste = true;
-					var pre = (this.opts.type === 'pre' || this.utils.isCurrentOrParent('pre'));
+					var pre = (this.opts.type === 'pre' || this.utils.isCurrentOrParent('pre')) ? true : false;
 
 					// clipboard event
-					if (!this.paste.pre && this.opts.clipboardImageUpload && this.opts.imageUpload && this.paste.detectClipboardUpload(e))
+					if (!this.paste.pre && !this.detect.isMobile() && this.opts.clipboardImageUpload && this.opts.imageUpload && this.paste.detectClipboardUpload(e))
 					{
 						if (this.detect.isIe())
 						{
@@ -7906,10 +7967,10 @@
 					{
 						var html = this.paste.getPasteBoxCode(pre);
 
-
 						// buffer
 						this.buffer.set();
 						this.selection.restore();
+
 						this.utils.restoreScroll();
 
 						// paste info
@@ -7947,9 +8008,9 @@
 				{
 					var css = { position: 'fixed', width: 0, top: 0, left: '-9999px' };
 
-					this.$pasteBox = (pre) ? $('<textarea>').val('').css(css) : $('<div>').html('').attr('contenteditable', 'true').css(css);
+					this.$pasteBox = (pre) ? $('<textarea>').css(css) : $('<div>').attr('contenteditable', 'true').css(css);
 					this.paste.appendPasteBox();
-					this.$pasteBox[0].focus();
+					this.$pasteBox.focus();
 				},
 				appendPasteBox: function()
 				{
@@ -8566,7 +8627,7 @@
 				},
 				restore: function(removeMarkers)
 				{
-					var node1 = this.marker.find(1);
+                    var node1 = this.marker.find(1);
 					var node2 = this.marker.find(2);
 
 					if (this.detect.isFirefox())
@@ -8871,11 +8932,6 @@
 					this.button.hideButtons();
 					this.button.hideButtonsOnMobile();
 
-					if (this.opts.buttons.length === 0)
-					{
-						return;
-					}
-
 					this.$toolbar = this.toolbar.createContainer();
 
 					this.toolbar.append();
@@ -8968,6 +9024,10 @@
 					var scrollTop = $(this.opts.toolbarFixedTarget).scrollTop();
 					var boxTop = this.toolbar.getBoxTop();
 
+                    if (scrollTop === boxTop)
+                    {
+                        return;
+                    }
 
 					if ((scrollTop + this.opts.toolbarFixedTopOffset + tolerance) > boxTop)
 					{
@@ -9025,6 +9085,7 @@
 					}
 
 					this.toolbar.setDropdownsFixed();
+
 					this.$toolbar.css('visibility', (scrollTop < end) ? 'visible' : 'hidden');
 					$(window).on('resize.redactor-toolbar.' + this.uuid, $.proxy(this.toolbar.observeScrollResize, this));
 				},
@@ -9484,6 +9545,11 @@
 				breakBlockTag: function()
 				{
 					var block = this.selection.block();
+					if (!block)
+					{
+    					return false;
+					}
+
 					var isEmpty = this.utils.isEmpty(block.innerHTML);
 
 					var tag = block.tagName.toLowerCase();
